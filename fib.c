@@ -1,29 +1,37 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-int getNthFibonacciIterative(int nthNum) {
-   int prevPrevNum;
+int getNthFibonacciIterative(int seq) {
+   // base
+   if (seq == 1) {
+      return 0;
+   } else if (seq == 2) {
+      return 1;
+   }
+
+   // iterative
    int prevNum = 0;
    int curNum = 1;
 
-   for (int i = 1; i < nthNum; i ++) {
-      prevPrevNum = prevNum;
+   // iterate (seq - 2) times since we already covered seq1 and seq2
+   for (int i = 0; i < seq - 2; i ++) {
+      int nxtNum = prevNum + curNum;
       prevNum = curNum;
-      curNum = prevPrevNum + prevNum;
+      curNum = nxtNum;
    }
    return curNum;
 }
 
-int getNthFibonacciRecursive(int nthNum) {
+int getNthFibonacciRecursive(int seq) {
    // base case
-   if (nthNum == 0) {
+   if (seq == 1) {
       return 0;
-   } else if (nthNum == 1) {
+   } else if (seq == 2) {
       return 1;
    }
 
    // recursive case
-   return getNthFibonacciRecursive(nthNum - 1) + getNthFibonacciRecursive(nthNum - 2);
+   return getNthFibonacciRecursive(seq - 1) + getNthFibonacciRecursive(seq - 2);
 }
 
 int main(int argc, char *argv[]) {
@@ -40,11 +48,11 @@ int main(int argc, char *argv[]) {
 
    int result;
 
-   // nth number is 1 indexed.
+   // nth number starts from 1 not 0
    if (*method == 'r') {
-      result = getNthFibonacciRecursive(num1 + num2 - 1);
+      result = getNthFibonacciRecursive(num1 + num2);
    } else if (*method == 'i') {
-      result = getNthFibonacciIterative(num1 + num2 - 1);
+      result = getNthFibonacciIterative(num1 + num2);
    }
 
    printf("%d", result);
