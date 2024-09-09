@@ -35,7 +35,8 @@ int getNthFibonacciRecursive(int seq) {
 }
 
 int main(int argc, char *argv[]) {
-   int num1 = atoi(argv[1]);
+   int num1;
+   sscanf(argv[1], "%d", &num1);
    char* method = argv[2];
    char* fileName = argv[3];
 
