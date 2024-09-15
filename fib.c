@@ -1,37 +1,64 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <stdint.h>
 
-int getNthFibonacciIterative(int seq) {
+typedef unsigned long long int (*ProviderPtr)(int);
+unsigned long long int memo[100];
+ProviderPtr ptr;
+
+unsigned long long int fib_i(int);
+unsigned long long int fib_r(int);
+unsigned long long int fib_wrapper(int);
+void initializeCache(ProviderPtr);
+
+unsigned long long int fib_i(int seq) {
    // base
-   if (seq == 1) {
+   if (seq == 0) {
       return 0;
-   } else if (seq == 2) {
+   } else if (seq == 1) {
       return 1;
    }
 
-   // iterative
-   int prevNum = 0;
-   int curNum = 1;
+   unsigned long long int prev = 0;
+   unsigned long long int cur = 1;
 
-   // iterate (seq - 2) times since we already covered seq1 and seq2
-   for (int i = 0; i < seq - 2; i ++) {
-      int nxtNum = prevNum + curNum;
-      prevNum = curNum;
-      curNum = nxtNum;
+   // iterate starts from 3rd fib since we already have 1st and 2nd fib
+   for (int i = 0; i < seq - 1; i++) {
+      unsigned long long int nxt = prev + cur;
+      prev = cur;
+      cur = nxt;
    }
-   return curNum;
+
+   return cur;
 }
 
-int getNthFibonacciRecursive(int seq) {
+unsigned long long int fib_r(int seq) {
    // base case
-   if (seq == 1) {
+   if (seq == 0) {
       return 0;
-   } else if (seq == 2) {
+   } else if (seq == 1) {
       return 1;
    }
 
+   unsigned long long int cur = fib_wrapper(seq - 1) + fib_wrapper(seq - 2);
+
+   return cur;
+}
+
+void initializeCache(ProviderPtr fib) {
+   ptr = fib;
+   memo[1] = 1;
+}
+
+unsigned long long int fib_wrapper(int seq) {
    // recursive case
-   return getNthFibonacciRecursive(seq - 1) + getNthFibonacciRecursive(seq - 2);
+   if (memo[seq] != 0) {
+      return memo[seq];
+   }
+
+   memo[seq] = ptr(seq);
+
+   return memo[seq];
 }
 
 int main(int argc, char *argv[]) {
@@ -47,16 +74,18 @@ int main(int argc, char *argv[]) {
    fscanf(f, "%d", &num2);
    fclose(f);
 
-   int result;
-
+   unsigned long long int result;
+   
    // nth number starts from 1 not 0
    if (*method == 'r') {
-      result = getNthFibonacciRecursive(num1 + num2);
+      initializeCache(fib_r);
    } else if (*method == 'i') {
-      result = getNthFibonacciIterative(num1 + num2);
+      initializeCache(fib_i);
    }
 
-   printf("%d", result);
+   result = fib_wrapper(num1 + num2);
+
+   printf("%llu", result);
 
    return 0;
 }
