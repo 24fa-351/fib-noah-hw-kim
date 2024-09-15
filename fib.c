@@ -13,9 +13,9 @@ void initializeCache(ProviderPtr);
 
 unsigned long long int fib_i(int seq) {
    // base
-   if (seq == 0) {
+   if (seq == 1) {
       return 0;
-   } else if (seq == 1) {
+   } else if (seq == 2) {
       return 1;
    }
 
@@ -23,7 +23,7 @@ unsigned long long int fib_i(int seq) {
    unsigned long long int cur = 1;
 
    // iterate starts from 3rd fib since we already have 1st and 2nd fib
-   for (int i = 0; i < seq - 1; i++) {
+   for (int i = 0; i < seq - 2; i++) {
       unsigned long long int nxt = prev + cur;
       prev = cur;
       cur = nxt;
@@ -34,9 +34,9 @@ unsigned long long int fib_i(int seq) {
 
 unsigned long long int fib_r(int seq) {
    // base case
-   if (seq == 0) {
+   if (seq == 1) {
       return 0;
-   } else if (seq == 1) {
+   } else if (seq == 2) {
       return 1;
    }
 
@@ -47,7 +47,8 @@ unsigned long long int fib_r(int seq) {
 
 void initializeCache(ProviderPtr fib) {
    ptr = fib;
-   memo[1] = 1;
+   // memo[1] = 0;
+   memo[2] = 1;
 }
 
 unsigned long long int fib_wrapper(int seq) {
