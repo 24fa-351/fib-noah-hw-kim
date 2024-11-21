@@ -27,7 +27,7 @@ unsigned long long int fib_i(int seq)
    unsigned long long int cur = 1;
 
    // iterate starts from 3rd fib since we already have 1st and 2nd fib
-   for (int i = 0; i < seq - 2; i++)
+   for (int idx = 0; idx < seq - 2; idx++)
    {
       unsigned long long int nxt = prev + cur;
       prev = cur;
